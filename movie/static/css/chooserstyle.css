@@ -1,0 +1,170 @@
+@import url('https://fonts.googleapis.com/css?family=Rajdhani');
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono');
+@import url('https://fonts.googleapis.com/css?family=Overpass+Mono');
+@import url('https://fonts.googleapis.com/css?family=Bangers');
+@import url('https://fonts.googleapis.com/css?family=PT+Sans');
+
+body {
+    background-color: grey;
+}
+
+#chooser {
+    padding: 30px;
+    border-style: solid;
+    border-radius: 20px;
+    margin: 10px;
+    background-color: darkgray;
+}
+
+#genres {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 300px 300px;
+}
+
+button {
+    float: right;
+    padding: 5px;
+    display: inline-block;
+    background-color: black;
+    border-color: red;
+    border-style: solid;
+    border-width: 6px;
+    color: white;
+    cursor: pointer;
+    font-family: 'PT Sans', sans-serif;
+    font-size: 22px;
+    margin: 7px;
+    margin-right: 15px;
+}
+#play_random:hover {
+    color:black;
+    background-color:white;
+}
+
+.genre_list {
+    display: flex;
+    border-style: solid;
+    flex-wrap: wrap;
+    border-radius: 30px;
+    overflow: hidden;
+    margin: 3px;
+}
+
+#remaining{
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 32px;
+    padding-bottom: 15px;
+}
+
+.genre_block {
+    border-style: solid;
+    flex: 1;
+    transition: all .4s;
+    background-size: cover;
+    background-position: center;
+    cursor: grab;
+    min-width: 150px;
+}
+
+*:not(input) {
+    -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none; /* Safari */
+       -khtml-user-select: none; /* Konqueror HTML */
+         -moz-user-select: none; /* Firefox */
+          -ms-user-select: none; /* Internet Explorer/Edge */
+              user-select: none; /* Non-prefixed version, currently */
+          }
+
+.genre_block span {
+    transition: all .4s;
+    transform: translateX(calc(-50% + 20px)) rotate(-90deg);
+    display: inline-block;
+    position: relative;
+    top: 50%;
+    left: 0;
+    color: white;
+    text-shadow: 0px 0px 3px #000, -1px -1px #000, 1px 1px #000;
+    font-family: 'Bangers', cursive;
+    font-size: 20px;
+}
+
+.genre_block:hover {
+    flex: 3;
+}
+.genre_block:hover span {
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+    font-size: 200%;
+}
+
+#genres_pool {
+    grid-row: 1;
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+#genres_exclude {
+    border-color: red;
+    background-color: red;
+    grid-column: 1;
+    grid-row: 2;
+}
+
+#genres_include {
+    border-color: green;
+    background-color: green;
+    grid-column: 2;
+    grid-row: 2;
+}
+
+#movies-slider {
+    display: block;
+}
+
+/* CSS grid stuff */
+#specifics {
+    display: grid;
+    grid-template-columns: 100px auto 100px;
+}
+
+#specifics > .label {
+    grid-column: 1;
+    text-align: right;
+    padding-right: 30px;
+    font-family: 'Roboto Mono', monospace;
+}
+
+#specifics > .min {
+    grid-column: 2;
+}
+
+#specifics > .max {
+    grid-column: 3;
+}
+
+#specifics > .slider {
+    grid-column-start: 2;
+    grid-column-end: 4;
+}
+
+#specifics > input {
+    margin: 10px;
+    font-family: 'Overpass Mono', monospace;
+    width: 60px;
+    font-size: 25px;
+    background-color: white;
+    border-style: solid;
+    border-color: black;
+    text-align: right;
+}
+
+input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+            margin: 0;
+        }
+         
+        input[type="number"] {
+                -moz-appearance: textfield;
+            }

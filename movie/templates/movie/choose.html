@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Document</title>
+        <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+        <link rel="stylesheet" href="{% static "css/chooserstyle.css" %}">
+        <link rel="stylesheet" href="{% static "css/choosergenres.css" %}">
+        <!-- noUiSlider -->
+        <script src="{% static "noUiSlider/nouislider.js" %}"></script>
+        <link rel="stylesheet" href="{% static "noUiSlider/nouislider.css" %}">
+        <!-- odometer -->
+        <script src="http://github.hubspot.com/odometer/odometer.js"></script>
+        <link rel="stylesheet" href="http://github.hubspot.com/odometer/themes/odometer-theme-car.css" />
+    </head>
+    <body>
+        <div id="chooser">
+            <div id="remaining" align="center">
+                <div id="movies_remaining" class="odometer">{{init_number}}</div>
+                <span id="text"></span> movies remaining
+            </div>
+            
+            <div id="specifics">
+                <div class="label year">year</div>
+                <div id="year-slider" class="year slider"></div>
+                <input class="min year" data-bind="value: min_year" id="min-year" type="number" name="min-year" min="{{min_year}}" max="{{max_year}}"
+                       onchange="yearSlider.noUiSlider.set([this.value, vm.max_year()])">
+                <input class="max year" data-bind="value: max_year" id="max-year" type="number" name="max-year" min="{{min_year}}" max="{{max_year}}"
+                       onchange="yearSlider.noUiSlider.set([vm.min_year(), this.value])">
+                
+                <div class="label runtime">runtime</div>
+                <div id="runtime-slider" class="runtime slider"></div>
+                <input class="min runtime" data-bind="value: min_runtime" id="min-runtime" type="number" name="min-runtime" min="{{min_runtime}}" max="{{max_runtime}}"
+                       onchange="runtimeSlider.noUiSlider.set([this.value, vm.max_runtime()])">
+                <input class="max runtime" data-bind="value: max_runtime" id="max-runtime" type="number" name="max-runtime" min="{{min_runtime}}" max="{{max_runtime}}"
+                       onchange="runtimeSlider.noUiSlider.set([vm.min_runtime(), this.value])">
+            </div>
+
+            <div id="genres">
+                <div data-bind="foreach: genres_pool" class="genre_list" id="genres_pool" ondragover="doDragOver(event)" ondrop="genreDrop(event, 'genres_pool')">
+                    <div draggable='true'
+                        data-bind="html: '<span>'+genre_lookup[$data]+'</span>', attr: {'id': 'genre-'+$data, 'ondragstart': 'genreDragStart(event)'}"
+                        class="genre_block"></div>
+                </div>
+
+                <div id="genres_exclude" data-bind="foreach: genres_exclude" class="genre_list" ondragover="doDragOver(event)" ondrop="genreDrop(event, 'genres_exclude')">
+                    <div draggable="true"
+                         data-bind="html: '<span>'+genre_lookup[$data]+'</span>', attr: {'id': 'genre-'+$data, 'ondragstart': 'genreDragStart(event)'}"
+                         class="genre_block"></div>
+                </div>
+    
+                <div id="genres_include" data-bind="foreach: genres_include" class="genre_list" ondragover="doDragOver(event)" ondrop="genreDrop(event, 'genres_include')">
+                    <div draggable="true"
+                         data-bind="html: '<span>'+genre_lookup[$data]+'</span>', attr: {'id': 'genre-'+$data, 'ondragstart': 'genreDragStart(event)'}"
+                         class="genre_block"></div>
+                </div>
+            </div>
+            <button id="play_random" type="button" onclick="play_random()">play random movie</button>
+
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+        <script src="{% static "js/chooser.js" %}"></script>
+        <script>
+
+var genre_lookup = { {% for genre in genres %}
+    {{genre.id}}: "{{genre.title}}",
+{% endfor %}};
+
+var vm = {
+    min_year: ko.observable({{min_year}}),
+    max_year: ko.observable({{max_year}}),
+    min_runtime: ko.observable({{min_runtime}}),
+    max_runtime: ko.observable({{max_runtime}}),
+    genres_pool: ko.observableArray([{% for genre in genres %}{{genre.id}},{% endfor %}]),
+    genres_include: ko.observableArray(),
+    genres_exclude: ko.observableArray(),
+};
+
+ko.applyBindings(vm);
+
+var yearSlider = document.getElementById('year-slider');
+noUiSlider.create(yearSlider, {
+    start: [{{min_year}}, {{max_year}}],
+    connect: true,
+    step: 1,
+    range: {
+        'min': {{min_year}},
+        'max': {{max_year}}
+    }
+});
+yearSlider.noUiSlider.on('slide', function() {
+    vm.min_year(Number(yearSlider.noUiSlider.get()[0]))
+    vm.max_year(Number(yearSlider.noUiSlider.get()[1]))
+});
+yearSlider.noUiSlider.on('update', updateNumber);
+
+var runtimeSlider = document.getElementById('runtime-slider');
+noUiSlider.create(runtimeSlider, {
+    start: [{{min_runtime}}, {{max_runtime}}],
+    connect: true,
+    step: 1,
+    range: {
+        'min': {{min_runtime}},
+        'max': {{max_runtime}}
+    }
+});
+runtimeSlider.noUiSlider.on('slide', function() {
+    vm.min_runtime(Number(runtimeSlider.noUiSlider.get()[0]))
+    vm.max_runtime(Number(runtimeSlider.noUiSlider.get()[1]))
+});
+runtimeSlider.noUiSlider.on('update', updateNumber);
+
+window.odometerOptions = {
+    duration: 1000
+}
+
+        </script>
+    </body>
+</html>
